@@ -13,20 +13,45 @@ import {
     ExternalLink
 } from "lucide-react";
 
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+
 export default function AdminDashboardPage() {
+    const { data: session } = useSession();
+    const [realStats, setRealStats] = useState({
+        projects: "0",
+        blogs: "0",
+        inquiries: "0",
+        users: "0"
+    });
+
+    useEffect(() => {
+        fetch("/api/admin/stats")
+            .then(res => res.json())
+            .then(data => {
+                setRealStats({
+                    projects: data.projects.toString(),
+                    blogs: data.blogs.toString(),
+                    inquiries: data.inquiries.toString(),
+                    users: data.users.toString()
+                });
+            })
+            .catch(console.error);
+    }, []);
+
     const stats = [
-        { title: "Total Projects", value: "12", icon: <Briefcase size={22} />, color: "emerald", trend: "+2 this month" },
-        { title: "Blog Posts", value: "48", icon: <PenTool size={22} />, color: "sky", trend: "+4 this month" },
-        { title: "Client Inquiries", value: "156", icon: <MessageSquare size={22} />, color: "indigo", trend: "+12 this week" },
-        { title: "Unique Visitors", value: "2.4k", icon: <Users size={22} />, color: "violet", trend: "+18% growth" },
+        { title: "Total Projects", value: realStats.projects, icon: <Briefcase size={22} />, color: "emerald", trend: "+2 this month" },
+        { title: "Blog Posts", value: realStats.blogs, icon: <PenTool size={22} />, color: "sky", trend: "+4 this month" },
+        { title: "Client Inquiries", value: realStats.inquiries, icon: <MessageSquare size={22} />, color: "indigo", trend: "+12 this week" },
+        { title: "Total Users", value: realStats.users, icon: <Users size={22} />, color: "violet", trend: "Growth" },
     ];
 
     return (
         <div className="space-y-6 lg:space-y-10">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 lg:mb-8">
                 <div>
-                    <h1 className="text-3xl lg:text-4xl font-bold font-heading mb-2">Welcome Back, Asif!</h1>
-                    <p className="text-slate-400 text-sm lg:text-base">Here&apos;s a summary of your portfolio activity.</p>
+                    <h1 className="text-3xl lg:text-4xl font-bold font-heading mb-2">Welcome Back, {session?.user?.name || "Asif"}!</h1>
+                    <p className="text-slate-400 text-sm lg:text-base">Here&apos;s a summary of your portal activity.</p>
                 </div>
                 <div className="px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 flex items-center gap-3 text-sm font-bold text-slate-300 self-start">
                     <Calendar size={18} className="text-emerald-400" />

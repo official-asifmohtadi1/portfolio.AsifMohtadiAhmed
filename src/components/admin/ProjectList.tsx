@@ -43,7 +43,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
                     <div className="relative h-44 rounded-2xl overflow-hidden mb-6 border border-slate-800 bg-slate-900 flex items-center justify-center">
                         {project.image ? (
-                            <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <Image src={project.image} alt={project.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                         ) : (
                             <Monitor size={48} className="text-slate-800" />
                         )}

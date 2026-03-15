@@ -19,6 +19,13 @@ body {
   /* Patterned background for premium dark look */
   background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
   background-size: 32px 32px;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Base custom styles if needed */

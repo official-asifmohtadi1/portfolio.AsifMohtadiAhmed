@@ -5,7 +5,10 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
+import { useLanguage } from "./LanguageProvider";
+
 export default function StickyHireMe() {
+    const { t } = useLanguage();
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -38,7 +41,7 @@ export default function StickyHireMe() {
 
                         {/* Tooltip-style Label */}
                         <span className="absolute right-20 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-slate-800 shadow-2xl pointer-events-none">
-                            Start a Project
+                            {t("startProject")}
                         </span>
 
                         {/* Pulsing Ring */}

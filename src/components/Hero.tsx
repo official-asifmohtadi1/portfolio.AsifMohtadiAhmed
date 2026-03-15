@@ -65,15 +65,15 @@ export default function Hero() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="flex items-center gap-6 pt-4"
                     >
-                        <a href="#" className="text-slate-400 hover:text-emerald-400 transition-colors">
+                        <a href="https://github.com/asifmohtadi1" target="_blank" className="text-slate-400 hover:text-emerald-400 transition-colors">
                             <Github size={24} />
                             <span className="sr-only">GitHub</span>
                         </a>
-                        <a href="#" className="text-slate-400 hover:text-emerald-400 transition-colors">
+                        <a href="https://linkedin.com/in/asifmohtadi" target="_blank" className="text-slate-400 hover:text-emerald-400 transition-colors">
                             <Linkedin size={24} />
                             <span className="sr-only">LinkedIn</span>
                         </a>
-                        <a href="#" className="text-slate-400 hover:text-emerald-400 transition-colors">
+                        <a href="https://twitter.com/asifmohtadi" target="_blank" className="text-slate-400 hover:text-emerald-400 transition-colors">
                             <Twitter size={24} />
                             <span className="sr-only">Twitter</span>
                         </a>
@@ -129,6 +129,7 @@ export default function Hero() {
                                 src="/asif-profile.jpg"
                                 alt="Asif Mohtadi Ahmed"
                                 fill
+                                sizes="(max-width: 768px) 320px, 384px"
                                 priority
                                 className="object-cover object-top"
                             />

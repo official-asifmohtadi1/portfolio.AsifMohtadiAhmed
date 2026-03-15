@@ -1,17 +1,21 @@
+"use client";
+
 import Image from "next/image";
-import {
-    User,
-    Lock,
-    Globe,
-    ShieldCheck,
-    Bell,
-    Palette,
-    Save,
-    Camera,
-    Crown
-} from "lucide-react";
+import { useState } from "react";
+import { User, Lock, Globe, ShieldCheck, Bell, Palette, Save, Camera, Crown } from "lucide-react";
+import SecuritySettings from "./SecuritySettings";
 
 export default function AdminSettingsPage() {
+    const [activeTab, setActiveTab] = useState("Public Profile");
+
+    const tabs = [
+        { name: "Public Profile", icon: <User size={18} /> },
+        { name: "Security", icon: <Lock size={18} /> },
+        { name: "SEO & Social", icon: <Globe size={18} /> },
+        { name: "Notifications", icon: <Bell size={18} /> },
+        { name: "Theme & Styling", icon: <Palette size={18} /> },
+    ];
+
     return (
         <div className="space-y-8">
             <div>
@@ -20,18 +24,13 @@ export default function AdminSettingsPage() {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-                {/* Navigation Tabs (Simulated) */}
+                {/* Navigation Tabs */}
                 <div className="lg:col-span-1 space-y-2">
-                    {[
-                        { name: "Public Profile", icon: <User size={18} />, active: true },
-                        { name: "Security", icon: <Lock size={18} />, active: false },
-                        { name: "SEO & Social", icon: <Globe size={18} />, active: false },
-                        { name: "Notifications", icon: <Bell size={18} />, active: false },
-                        { name: "Theme & Styling", icon: <Palette size={18} />, active: false },
-                    ].map((tab) => (
+                    {tabs.map((tab) => (
                         <button
                             key={tab.name}
-                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold transition-all ${tab.active
+                            onClick={() => setActiveTab(tab.name)}
+                            className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold transition-all ${tab.name === activeTab
                                     ? "bg-slate-900 border border-emerald-500/30 text-emerald-400"
                                     : "text-slate-500 hover:text-white hover:bg-slate-900/50"
                                 }`}
@@ -45,7 +44,9 @@ export default function AdminSettingsPage() {
                 {/* Settings Content */}
                 <div className="lg:col-span-2 space-y-8">
 
-                    {/* Profile Identity Cards */}
+                    {activeTab === "Public Profile" && (
+                        <>
+                            {/* Profile Identity Cards */}
                     <div className="glass p-8 rounded-[2rem] border-slate-800">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
                             <User className="text-emerald-400" size={20} /> Account Identity
@@ -59,6 +60,7 @@ export default function AdminSettingsPage() {
                                         src="/asif-profile.jpg"
                                         alt="Asif Mohtadi Ahmed"
                                         fill
+                                        sizes="112px"
                                         className="object-cover object-top"
                                     />
                                 </div>
@@ -89,6 +91,7 @@ export default function AdminSettingsPage() {
                                         src="/asif-profile.jpg"
                                         alt="Normal User"
                                         fill
+                                        sizes="48px"
                                         className="object-cover object-top"
                                     />
                                 </div>
@@ -109,6 +112,7 @@ export default function AdminSettingsPage() {
                                             src="/asif-profile.jpg"
                                             alt="Super Admin"
                                             fill
+                                            sizes="48px"
                                             className="object-cover object-top"
                                         />
                                     </div>
@@ -169,6 +173,11 @@ export default function AdminSettingsPage() {
                             Delete Account Permanently
                         </button>
                     </div>
+                        </>
+                    )}
+                    {activeTab === "Security" && (
+                        <SecuritySettings />
+                    )}
                 </div>
             </div>
         </div>

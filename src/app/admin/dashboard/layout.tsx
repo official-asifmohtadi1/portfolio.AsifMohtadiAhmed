@@ -13,16 +13,20 @@ import {
     Bell,
     Search,
     Menu,
-    X
+    X,
+    Users as UsersIcon,
+    Image as ImageIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function AdminDashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const { data: session } = useSession();
     const pathname = usePathname();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -44,11 +48,18 @@ export default function AdminDashboardLayout({
 
     const menuItems = [
         { name: "Overview", icon: <LayoutDashboard size={20} />, href: "/admin/dashboard" },
+        { name: "Gallery", icon: <ImageIcon size={20} />, href: "/admin/dashboard/gallery" },
         { name: "Projects", icon: <Briefcase size={20} />, href: "/admin/dashboard/projects" },
         { name: "Blog Posts", icon: <PenTool size={20} />, href: "/admin/dashboard/blog" },
         { name: "Inquiries", icon: <MessageSquare size={20} />, href: "/admin/dashboard/inquiries" },
         { name: "Settings", icon: <Settings size={20} />, href: "/admin/dashboard/settings" },
     ];
+
+    // Add Users management only for SUPERUSER
+    if (session?.user?.role === "SUPERUSER") {
+        menuItems.splice(5, 0, { name: "Users", icon: <UsersIcon size={20} />, href: "/admin/dashboard/users" });
+    }
+
 
     return (
         <div className="flex min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200">
@@ -75,7 +86,7 @@ export default function AdminDashboardLayout({
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-500 flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform shadow-lg shadow-emerald-500/10">
                             A
                         </div>
-                        <span className="font-heading font-bold text-xl tracking-tight">Admin<span className="text-emerald-400">.</span>dev</span>
+                        <span className="font-heading font-bold text-xl tracking-tight">Mohtadi&apos;s <span className="text-emerald-400">Admin</span></span>
                     </Link>
                     <button
                         onClick={() => setIsSidebarOpen(false)}
@@ -109,17 +120,18 @@ export default function AdminDashboardLayout({
                                 src="/asif-profile.jpg"
                                 alt="Asif Mohtadi Ahmed"
                                 fill
+                                sizes="44px"
                                 className="object-cover object-top"
                             />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-sm font-bold text-white truncate">Asif Mohtadi</p>
-                            <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Super Admin</p>
+                            <p className="text-sm font-bold text-white truncate">{session?.user?.name || "Admin"}</p>
+                            <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{session?.user?.role || "User"}</p>
                         </div>
                         <div className="ml-auto w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                     </div>
                     <Link
-                        href="/admin/login"
+                        href="/api/auth/signout"
                         className="flex items-center gap-4 px-5 py-4 rounded-2xl text-sm font-bold text-slate-400 hover:text-red-400 transition-colors"
                     >
                         <LogOut size={20} />
@@ -157,15 +169,16 @@ export default function AdminDashboardLayout({
                         <div className="h-8 w-px bg-slate-800 hidden sm:block" />
                         <div className="flex items-center gap-3 lg:gap-4">
                             <div className="text-right hidden sm:block">
-                                <p className="text-sm font-bold">Asif Admin</p>
-                                <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Super Admin</p>
+                                <p className="text-sm font-bold">{session?.user?.name || "Admin"}</p>
+                                <p className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">{session?.user?.role || "User"}</p>
                             </div>
                             <div className="w-10 h-10 rounded-full border-2 border-emerald-500/50 p-0.5 relative flex-shrink-0">
                                 <Image
-                                    src="/asif-profile.jpg"
+                                    src={session?.user?.image || "/asif-profile.jpg"}
                                     className="w-full h-full rounded-full object-cover object-top"
-                                    alt="Asif Mohtadi Ahmed"
+                                    alt={session?.user?.name || "User"}
                                     fill
+                                    sizes="40px"
                                 />
                                 <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-slate-950" />
                             </div>

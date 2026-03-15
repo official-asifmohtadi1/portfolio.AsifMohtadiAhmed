@@ -14,12 +14,20 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     const post = await getPostData(slug);
 
     return {
-        title: `${post.title} | Asif Mohtadi Ahmed`,
+        title: `${post.title} | Blog | Mohtadi's Portal`,
         description: post.excerpt,
         openGraph: {
             title: post.title,
             description: post.excerpt,
             images: [{ url: post.image }],
+            type: "article",
+            publishedTime: post.date,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description: post.excerpt,
+            images: [post.image],
         }
     };
 }
@@ -32,6 +40,23 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col pt-24">
             <Navbar />
             <main className="container mx-auto px-6 py-12 flex-grow">
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "BlogPosting",
+                            "headline": post.title,
+                            "description": post.excerpt,
+                            "image": post.image,
+                            "datePublished": post.date,
+                            "author": {
+                                "@type": "Person",
+                                "name": "Asif Mohtadi Ahmed"
+                            }
+                        })
+                    }}
+                />
                 <div className="max-w-4xl mx-auto">
                     {/* Back Navigation */}
                     <Link href="/blog" className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors mb-12 font-medium">
@@ -62,6 +87,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                                 src={post.image}
                                 alt={post.title}
                                 fill
+                                sizes="100vw"
                                 priority
                                 className="object-cover"
                             />

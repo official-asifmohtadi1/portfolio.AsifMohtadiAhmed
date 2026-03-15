@@ -52,7 +52,7 @@ export default function BlogTable({ posts }: { posts: BlogPost[] }) {
                                 <td className="px-8 py-6">
                                     <div className="flex items-center gap-4">
                                         <div className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-800 flex-shrink-0">
-                                            <Image src={post.image} alt={post.title} fill className="object-cover" />
+                                            <Image src={post.image} alt={post.title} fill sizes="64px" className="object-cover" />
                                         </div>
                                         <div>
                                             <h4 className="font-bold text-slate-200 group-hover:text-emerald-400 transition-colors">{post.title}</h4>

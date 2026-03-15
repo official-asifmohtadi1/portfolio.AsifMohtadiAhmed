@@ -12,17 +12,17 @@ export default function Footer() {
                                 A
                             </div>
                             <span className="font-heading font-bold text-xl tracking-tight">
-                                Asif<span className="text-emerald-400">.</span>dev
+                                Mohtadi&apos;s <span className="text-emerald-400">Portal</span>
                             </span>
                         </Link>
                         <p className="text-slate-400 max-w-sm">
                             Crafting high-performance digital architectures with React and dynamic storytelling through exceptional content.
                         </p>
                         <div className="flex items-center gap-4 pt-4">
-                            <a href="https://github.com" className="p-2 rounded-full bg-slate-900 border border-slate-800 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
+                            <a href="https://github.com/asifmohtadi1" target="_blank" className="p-2 rounded-full bg-slate-900 border border-slate-800 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
                                 <Github size={20} />
                             </a>
-                            <a href="https://linkedin.com" className="p-2 rounded-full bg-slate-900 border border-slate-800 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
+                            <a href="https://linkedin.com/in/asifmohtadi" target="_blank" className="p-2 rounded-full bg-slate-900 border border-slate-800 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
                                 <Linkedin size={20} />
                             </a>
                             <a href="mailto:asifmohtadi1@gmail.com" className="p-2 rounded-full bg-slate-900 border border-slate-800 hover:text-emerald-400 hover:border-emerald-500/50 transition-colors">
@@ -48,6 +48,9 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link href="/blog" className="text-slate-400 hover:text-emerald-400 text-sm transition-colors">Blog Insights</Link>
+                            </li>
+                            <li>
+                                <Link href="/gallery" className="text-slate-400 hover:text-emerald-400 text-sm transition-colors">Gallery</Link>
                             </li>
                             <li>
                                 <Link href="/#contact" className="text-slate-400 hover:text-emerald-400 text-sm transition-colors">Contact</Link>

@@ -42,6 +42,7 @@ export default async function BlogIndex() {
                                         src={post.image}
                                         alt={post.title}
                                         fill
+                                        sizes="(max-width: 768px) 100vw, 50vw"
                                         className="object-cover transition-transform group-hover:scale-105 duration-700"
                                     />
                                     <div className="absolute top-4 left-4">

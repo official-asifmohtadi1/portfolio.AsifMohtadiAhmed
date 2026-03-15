@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { useLanguage } from "./LanguageProvider";
 
 // Form Validation Schema
 const formSchema = z.object({
@@ -18,6 +19,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function Contact() {
+    const { t } = useLanguage();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
@@ -35,17 +37,27 @@ export default function Contact() {
         setIsSubmitting(true);
         setErrorMsg("");
 
-        // Simulate API Call for Email Auto-Responder Config / Form submission
         try {
-            await new Promise((res) => setTimeout(res, 2000));
-            console.log("Form Submitted", data);
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || "Failed to send message");
+            }
+
+            console.log("Form Submitted Successfully");
             setIsSuccess(true);
             reset();
 
             // Reset success state after 5 seconds
             setTimeout(() => setIsSuccess(false), 5000);
-        } catch {
-            setErrorMsg("Something went wrong. Please try again later.");
+        } catch (error: any) {
+            setErrorMsg(error.message || "Something went wrong. Please try again later.");
         } finally {
             setIsSubmitting(false);
         }
@@ -57,7 +69,7 @@ export default function Contact() {
                 <div className="max-w-4xl mx-auto glass p-8 md:p-12 rounded-[3rem] shadow-2xl shadow-emerald-500/10 border-slate-700/50">
                     <div className="text-center mb-12">
                         <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">
-                            Let&apos;s <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">Work Together</span>
+                            {t("contactTitle").split(" ").slice(0, -2).join(" ")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">{t("contactTitle").split(" ").slice(-2).join(" ")}</span>
                         </h2>
                         <p className="text-slate-400">
                             Fill out the form below to discuss your project, and I&apos;ll get back to you with an auto-responder confirmation.

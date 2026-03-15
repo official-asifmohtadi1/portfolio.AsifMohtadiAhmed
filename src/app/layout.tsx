@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -13,15 +14,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Asif Mohtadi Ahmed | Head of IT Dept. | Softs Studio",
+  metadataBase: new URL('https://asifmohtadi.me'),
+  title: "Mohtadi's Portal",
   description: "Senior Developer & Head of IT specializing in React, Next.js, and WordPress. Discover high-performance solutions and professional IT resume building services.",
   keywords: ["Asif Mohtadi Ahmed", "Head of IT", "Softs Studio", "Full Stack Developer", "React Expert", "WordPress Specialist", "IT Resume Builder", "Bangladesh IT Expert"],
   authors: [{ name: "Asif Mohtadi Ahmed" }],
   openGraph: {
-    title: "Asif Mohtadi Ahmed | Head of IT Dept. | Softs Studio",
+    title: "Mohtadi's Portal",
     description: "Expert React & WordPress Development Portfolio. Delivering scalable digital experiences at Softs Studio.",
     url: "https://asifmohtadi.me",
-    siteName: "Asif Mohtadi Ahmed Portfolio",
+    siteName: "Mohtadi's Portal",
     images: [
       {
         url: "/og-image.jpg",
@@ -35,15 +37,27 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Asif Mohtadi Ahmed | Head of IT Dept.",
+    title: "Mohtadi's Portal | Senior Developer & Head of IT",
     description: "Senior Developer & IT Leader. View my portfolio of React and WordPress projects.",
     images: ["/og-image.jpg"],
-  }
+  },
+  alternates: {
+    canonical: 'https://asifmohtadi.me',
+    languages: {
+      'en-US': 'https://asifmohtadi.me',
+      'bn-BD': 'https://asifmohtadi.me?lang=bn',
+      'ar-SA': 'https://asifmohtadi.me?lang=ar',
+    },
+  },
 };
 
 export const viewport: Viewport = {
   themeColor: "#0f172a",
+  width: "device-width",
+  initialScale: 1,
 };
+
+import { Providers } from "@/components/Providers";
 
 export default function RootLayout({
   children,
@@ -51,7 +65,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4682872605160930"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${outfit.variable} ${inter.variable} antialiased bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 min-h-screen flex flex-col`}
       >
@@ -69,8 +91,9 @@ export default function RootLayout({
               },
               "url": "https://asifmohtadi.me",
               "sameAs": [
-                "https://github.com",
-                "https://linkedin.com"
+                "https://github.com/asifmohtadi1",
+                "https://linkedin.com/in/asifmohtadi",
+                "https://twitter.com/asifmohtadi"
               ],
               "description": "Senior Developer and Head of IT specializing in React and WordPress architectures.",
               "address": {
@@ -81,7 +104,9 @@ export default function RootLayout({
             })
           }}
         />
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

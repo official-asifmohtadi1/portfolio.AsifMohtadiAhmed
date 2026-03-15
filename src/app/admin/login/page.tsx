@@ -7,6 +7,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+import { signIn } from "next-auth/react";
+
 export default function AdminLogin() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,15 +21,27 @@ export default function AdminLogin() {
         setIsLoading(true);
         setError("");
 
-        // Simulate authentication
-        setTimeout(() => {
-            if (email === "asif@dev.com" && password === "admin123") {
-                router.push("/admin/dashboard");
-            } else {
-                setError("Invalid credentials. Try asif@dev.com / admin123");
+        try {
+            const result = await signIn("credentials", {
+                email,
+                password,
+                redirect: false
+            });
+
+            if (result?.error) {
+                if (result.error === "PENDING_APPROVAL") {
+                    setError("Your account is pending approval from the Super User.");
+                } else {
+                    setError("Invalid email or password.");
+                }
                 setIsLoading(false);
+            } else {
+                router.push("/admin/dashboard");
             }
-        }, 1500);
+        } catch (err) {
+            setError("Something went wrong. Please try again.");
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -52,24 +66,23 @@ export default function AdminLogin() {
                                     src="/asif-profile.jpg"
                                     alt="Asif Mohtadi Ahmed"
                                     fill
+                                    sizes="80px"
                                     className="object-cover object-top"
                                     priority
                                 />
                             </div>
-                            {/* Glowing online ring */}
                             <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-slate-950 shadow-[0_0_10px_rgba(16,185,129,0.9)]" />
-                            {/* Ping animation */}
                             <span className="absolute inset-0 rounded-full border-2 border-emerald-500/30 animate-ping" />
                         </div>
                     </div>
 
                     <Link href="/" className="inline-block mb-2">
                         <span className="font-heading font-bold text-2xl tracking-tight text-white">
-                            Asif<span className="text-emerald-400">.</span>dev
+                            Mohtadi&apos;s <span className="text-emerald-400">Portal</span>
                         </span>
                     </Link>
                     <h1 className="text-3xl font-bold font-heading text-white mb-3">Admin Portal</h1>
-                    <p className="text-slate-400 text-sm mb-5">Secure access to the portfolio management system.</p>
+                    <p className="text-slate-400 text-sm mb-5">Secure access to the management system.</p>
 
                     {/* Role Badges */}
                     <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -83,7 +96,6 @@ export default function AdminLogin() {
                 </div>
 
                 <div className="glass p-8 md:p-10 rounded-[2.5rem] border-slate-800 shadow-2xl relative overflow-hidden group">
-                    {/* Form Glow Effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
 
                     <form onSubmit={handleLogin} className="space-y-6 relative">
@@ -97,8 +109,8 @@ export default function AdminLogin() {
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all focus:outline-none text-white placeholder-slate-500"
-                                    placeholder="name@dev.com"
+                                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-emerald-500 transition-all focus:outline-none text-white placeholder-slate-500"
+                                    placeholder="name@example.com"
                                     required
                                 />
                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
@@ -106,16 +118,21 @@ export default function AdminLogin() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="password">
-                                Password
-                            </label>
+                            <div className="flex items-center justify-between mb-2">
+                                <label className="block text-sm font-medium text-slate-300" htmlFor="password">
+                                    Password
+                                </label>
+                                <Link href="/admin/forgot-password" title="Forgot Password" className="text-xs font-bold text-emerald-400 hover:text-emerald-300">
+                                    Forgot Password?
+                                </Link>
+                            </div>
                             <div className="relative">
                                 <input
                                     id="password"
                                     type="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all focus:outline-none text-white placeholder-slate-500"
+                                    className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-slate-900/50 border border-slate-800 focus:border-emerald-500 transition-all focus:outline-none text-white placeholder-slate-500"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -136,7 +153,7 @@ export default function AdminLogin() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] disabled:opacity-70"
+                            className="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.3)] disabled:opacity-70 uppercase tracking-widest"
                         >
                             {isLoading ? <Loader2 className="animate-spin" size={22} /> : (
                                 <>
@@ -145,7 +162,15 @@ export default function AdminLogin() {
                             )}
                         </button>
                     </form>
+                    
+                    <div className="mt-8 pt-8 border-t border-slate-800/50 text-center">
+                        <p className="text-slate-500 text-xs font-bold mb-4">Don&apos;t have an account?</p>
+                        <Link href="/admin/register" className="inline-block px-6 py-2 rounded-xl bg-slate-900 border border-slate-800 text-emerald-400 text-xs font-black hover:bg-slate-800 transition-all uppercase tracking-widest">
+                            Apply for Access
+                        </Link>
+                    </div>
                 </div>
+
 
                 <div className="mt-8 text-center">
                     <Link href="/" className="text-slate-500 hover:text-white text-sm transition-colors">

@@ -24,12 +24,18 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     if (!project) return { title: "Project Not Found" };
 
     return {
-        title: `${project.title} | Case Study | Asif Mohtadi Ahmed`,
+        title: `${project.title} | Case Study | Mohtadi's Portal`,
         description: project.description,
         openGraph: {
             title: project.title,
             description: project.description,
             images: [{ url: project.image }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: project.title,
+            description: project.description,
+            images: [project.image],
         }
     };
 }
@@ -46,6 +52,24 @@ export default async function ProjectCaseStudy({ params }: { params: Params }) {
         <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col pt-24">
             <Navbar />
             <main className="container mx-auto px-6 py-12 flex-grow">
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify({
+                            "@context": "https://schema.org",
+                            "@type": "CreativeWork",
+                            "name": project.title,
+                            "description": project.description,
+                            "image": project.image,
+                            "author": {
+                                "@type": "Person",
+                                "name": "Asif Mohtadi Ahmed"
+                            },
+                            "keywords": project.tech.join(", "),
+                            "url": `https://asifmohtadi.me/portfolio/${project.slug}`
+                        })
+                    }}
+                />
                 <div className="max-w-6xl mx-auto">
                     {/* Back Navigation */}
                     <Link href="/#portfolio" className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors mb-12 font-medium">
@@ -88,7 +112,7 @@ export default async function ProjectCaseStudy({ params }: { params: Params }) {
                         <div className="relative group">
                             <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/20 to-sky-500/20 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
                             <div className="relative aspect-video rounded-[3rem] overflow-hidden border border-slate-800 shadow-2xl skew-y-1 group-hover:skew-y-0 transition-transform duration-700">
-                                <Image src={project.image} alt={project.title} fill priority className="object-cover" />
+                                <Image src={project.image} alt={project.title} fill sizes="(max-width: 1024px) 100vw, 50vw" priority className="object-cover" />
                             </div>
                         </div>
                     </div>
@@ -138,7 +162,7 @@ export default async function ProjectCaseStudy({ params }: { params: Params }) {
                         <div className="grid md:grid-cols-2 gap-8">
                             {project.images.map((img, i) => (
                                 <div key={i} className="relative aspect-video rounded-[2.5rem] overflow-hidden border border-slate-800 shadow-xl group">
-                                    <Image src={img} alt={`${project.title} Preview ${i + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                                    <Image src={img} alt={`${project.title} Preview ${i + 1}`} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                                 </div>
                             ))}
                         </div>
