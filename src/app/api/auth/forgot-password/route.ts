@@ -48,16 +48,21 @@ export async function POST(req: Request) {
 
         // Send Email if the user has an email
         if (user.email) {
-            await sendEmail(
-                user.email,
-                "Password Recovery Instructions",
-                `You requested a password reset. 
-                
+            try {
+                await sendEmail(
+                    user.email,
+                    "Password Recovery Instructions",
+                    `You requested a password reset. 
+                    
 Please use this code: ${code}
 Or click this link: ${resetLink}
-                
+                    
 If you did not request this, please ignore this email. Note that the code expires in 15 minutes.`
-            );
+                );
+            } catch (emailError) {
+                console.error("Failed to send password recovery email (is SMTP configured?):", emailError);
+                // We proceed anyway so the system remains functional (the token was created successfully).
+            }
         }
 
         // Technically we would use an SMS provider like Twilio here for phone numbers

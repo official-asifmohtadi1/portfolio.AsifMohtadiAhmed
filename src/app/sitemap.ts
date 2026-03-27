@@ -1,40 +1,41 @@
 import { MetadataRoute } from 'next';
-import { getProjectsData } from '@/lib/projects';
-import { getSortedPostsData } from '@/lib/blog';
+import { prisma } from '@/lib/prisma';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://asifmohtadi.me';
+  const baseUrl = 'https://asifmohtadi.me';
 
-    // Static routes
-    const routes = [
-        '',
-        '/blog',
-        '/gallery',
-        '/resume-builder',
-    ].map((route) => ({
-        url: `${baseUrl}${route}`,
-        lastModified: new Date(),
-        changeFrequency: (route === '' ? 'daily' : 'weekly') as any,
-        priority: route === '' ? 1.0 : 0.8,
-    }));
+  // Fetch dynamic content
+  const blogs = await prisma.blog.findMany({
+    where: { status: 'PUBLISHED' },
+    select: { slug: true, updatedAt: true },
+  });
 
-    // Dynamic Portfolio Projects
-    const projects = getProjectsData();
-    const projectRoutes = projects.map((project) => ({
-        url: `${baseUrl}/portfolio/${project.slug}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
-    }));
+  const blogUrls = blogs.map((blog) => ({
+    url: `${baseUrl}/blog/${blog.slug}`,
+    lastModified: blog.updatedAt,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
 
-    // Dynamic Blog Posts
-    const posts = await getSortedPostsData();
-    const blogRoutes = posts.map((post) => ({
-        url: `${baseUrl}/blog/${post.slug}`,
-        lastModified: new Date(post.date),
-        changeFrequency: 'monthly' as const,
-        priority: 0.5,
-    }));
-
-    return [...routes, ...projectRoutes, ...blogRoutes];
+  return [
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/portfolio`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...blogUrls,
+  ];
 }

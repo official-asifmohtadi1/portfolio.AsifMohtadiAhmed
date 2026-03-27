@@ -31,13 +31,13 @@ export default function StickyHireMe() {
                     initial={{ scale: 0, opacity: 0, x: 50 }}
                     animate={{ scale: 1, opacity: 1, x: 0 }}
                     exit={{ scale: 0, opacity: 0, x: 50 }}
-                    className="fixed bottom-8 right-8 z-[60]"
+                    className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-[60]"
                 >
                     <Link
                         href="#contact"
-                        className="group relative flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-500 text-slate-950 shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:bg-emerald-400 transition-all hover:scale-110 active:scale-95"
+                        className="group relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-emerald-500 text-slate-950 shadow-[0_0_30px_rgba(16,185,129,0.5)] hover:bg-emerald-400 transition-all hover:scale-110 active:scale-95"
                     >
-                        <MessageSquare size={28} />
+                        <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7" />
 
                         {/* Tooltip-style Label */}
                         <span className="absolute right-20 px-4 py-2 rounded-xl bg-slate-900 text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-slate-800 shadow-2xl pointer-events-none">

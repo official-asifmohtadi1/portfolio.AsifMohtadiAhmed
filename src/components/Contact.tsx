@@ -66,10 +66,10 @@ export default function Contact() {
     return (
         <section id="contact" className="py-24 relative overflow-hidden bg-slate-900/50">
             <div className="container mx-auto px-6 relative z-10">
-                <div className="max-w-4xl mx-auto glass p-8 md:p-12 rounded-[3rem] shadow-2xl shadow-emerald-500/10 border-slate-700/50">
-                    <div className="text-center mb-12">
-                        <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4">
-                            {t("contactTitle").split(" ").slice(0, -2).join(" ")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">{t("contactTitle").split(" ").slice(-2).join(" ")}</span>
+                <div className="max-w-4xl mx-auto glass p-6 sm:p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl shadow-emerald-500/10 border-slate-700/50">
+                    <div className="text-center mb-8 md:mb-12">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading mb-4 px-2">
+                            {t("contactTitle").split(" ").slice(0, -2).join(" ")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400 break-words">{t("contactTitle").split(" ").slice(-2).join(" ")}</span>
                         </h2>
                         <p className="text-slate-400">
                             Fill out the form below to discuss your project, and I&apos;ll get back to you with an auto-responder confirmation.

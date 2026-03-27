@@ -13,43 +13,56 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://asifmohtadi.me'),
-  title: "Mohtadi's Portal",
-  description: "Senior Developer & Head of IT specializing in React, Next.js, and WordPress. Discover high-performance solutions and professional IT resume building services.",
-  keywords: ["Asif Mohtadi Ahmed", "Head of IT", "Softs Studio", "Full Stack Developer", "React Expert", "WordPress Specialist", "IT Resume Builder", "Bangladesh IT Expert"],
-  authors: [{ name: "Asif Mohtadi Ahmed" }],
-  openGraph: {
-    title: "Mohtadi's Portal",
-    description: "Expert React & WordPress Development Portfolio. Delivering scalable digital experiences at Softs Studio.",
-    url: "https://asifmohtadi.me",
-    siteName: "Mohtadi's Portal",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Asif Mohtadi Ahmed Portfolio",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Mohtadi's Portal | Senior Developer & Head of IT",
-    description: "Senior Developer & IT Leader. View my portfolio of React and WordPress projects.",
-    images: ["/og-image.jpg"],
-  },
-  alternates: {
-    canonical: 'https://asifmohtadi.me',
-    languages: {
-      'en-US': 'https://asifmohtadi.me',
-      'bn-BD': 'https://asifmohtadi.me?lang=bn',
-      'ar-SA': 'https://asifmohtadi.me?lang=ar',
+import { prisma } from "@/lib/prisma";
+
+export async function generateMetadata(): Promise<Metadata> {
+  let settings;
+  try {
+    settings = await prisma.siteSettings.findUnique({ where: { id: "global" } });
+  } catch(e) { /* silent on fresh install */ }
+  
+  const title = settings?.seoTitle || "Mohtadi's Portal";
+  const description = settings?.seoDescription || "Expert React & WordPress Development Portfolio.";
+  const keywords = (settings?.seoKeywords || "React, Next.js, WordPress").split(',').map((k: string) => k.trim());
+
+  return {
+    metadataBase: new URL('https://asifmohtadi.me'),
+    title: title,
+    description: description,
+    keywords: keywords,
+    authors: [{ name: "Asif Mohtadi Ahmed" }],
+    openGraph: {
+      title: title,
+      description: description,
+      url: "https://asifmohtadi.me",
+      siteName: title,
+      images: [
+        {
+          url: "/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Asif Mohtadi Ahmed Portfolio",
+        },
+      ],
+      locale: "en_US",
+      type: "website",
     },
-  },
-};
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: ["/og-image.jpg"],
+    },
+    alternates: {
+      canonical: 'https://asifmohtadi.me',
+      languages: {
+        'en-US': 'https://asifmohtadi.me',
+        'bn-BD': 'https://asifmohtadi.me?lang=bn',
+        'ar-SA': 'https://asifmohtadi.me?lang=ar',
+      },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0f172a",
@@ -67,6 +80,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <meta name="google-adsense-account" content="ca-pub-4682872605160930" />
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4682872605160930"

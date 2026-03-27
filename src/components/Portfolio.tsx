@@ -18,7 +18,7 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
             <div className="container mx-auto px-6">
                 <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-12 border-b border-slate-800 pb-8 gap-8">
                     <div className="max-w-xl text-center lg:text-left">
-                        <h2 className="text-4xl md:text-5xl font-bold font-heading mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
                             Selected Works
                         </h2>
                         <p className="text-slate-400 text-lg">
@@ -26,12 +26,12 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
                         </p>
                     </div>
 
-                    <div className="flex gap-2 sm:gap-4 p-1 rounded-2xl bg-slate-900/50 border border-slate-800 self-center lg:self-end overflow-x-auto max-w-full">
+                    <div className="flex w-full lg:w-auto gap-2 sm:gap-4 p-1 rounded-2xl bg-slate-900/50 border border-slate-800 self-center lg:self-end overflow-x-auto whitespace-nowrap hide-scrollbar snap-x">
                         {["All", "React", "WordPress"].map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => setFilter(cat)}
-                                className={`px-4 sm:px-8 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${filter === cat
+                                className={`px-4 sm:px-8 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap snap-center shrink-0 ${filter === cat
                                     ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20"
                                     : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                                     }`}
@@ -53,7 +53,7 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
                             key={project.slug}
                             className="group glass rounded-[2.5rem] overflow-hidden shadow-2xl hover:shadow-emerald-500/10 transition-all border border-slate-800/50 hover:border-emerald-500/50 flex flex-col"
                         >
-                            <div className="relative h-64 sm:h-80 overflow-hidden">
+                            <div className="relative h-56 sm:h-64 md:h-80 overflow-hidden">
                                 <Image
                                     src={project.image}
                                     alt={project.title}
@@ -74,13 +74,13 @@ export default function Portfolio({ projects }: { projects: Project[] }) {
                                 <div className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
                                     {project.category}
                                 </div>
-                                <h3 className="text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-sky-400 transition-all cursor-pointer">
+                                <h3 className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-sky-400 transition-all cursor-pointer">
                                     <Link href={`/portfolio/${project.slug}`} className="flex items-center gap-2">
                                         {project.title}
                                         <ExternalLink size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </Link>
                                 </h3>
-                                <p className="text-slate-400 mb-6">{project.description}</p>
+                                <p className="text-slate-400 mb-6 text-sm sm:text-base line-clamp-3">{project.description}</p>
                                 <div className="flex flex-wrap gap-2">
                                     {project.tech.map((tech: string) => (
                                         <span

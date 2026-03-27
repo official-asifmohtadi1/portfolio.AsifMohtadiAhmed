@@ -133,3 +133,14 @@ model Resume {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model SiteSettings {
+  id               String   @id @default("global")
+  seoTitle         String   @default("Mohtadi's Portal")
+  seoDescription   String   @default("Senior Developer & Head of IT specializing in React, Next.js, and WordPress.")
+  seoKeywords      String   @default("Asif Mohtadi Ahmed, Head of IT, Softs Studio")
+  primaryColor     String   @default("#10b981")
+  notifyOnInquiry  Boolean  @default(true)
+  notifyOnNewUser  Boolean  @default(true)
+  updatedAt        DateTime @updatedAt
+}

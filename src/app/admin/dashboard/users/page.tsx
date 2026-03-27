@@ -30,7 +30,7 @@ export default function UserManagementPage() {
     const fetchUsers = async () => {
         setIsLoading(true);
         try {
-            const res = await fetch("/api/admin/users");
+            const res = await fetch("/api/admin/users", { cache: "no-store" });
             const data = await res.json();
             setUsers(data.users || []);
         } catch (error) {
@@ -41,28 +41,36 @@ export default function UserManagementPage() {
     };
 
     const handleUpdateStatus = async (userId: string, newStatus: string) => {
+        const previousUsers = [...users];
+        setUsers(users.map(u => u.id === userId ? { ...u, status: newStatus } : u));
+        
         try {
             const res = await fetch(`/api/admin/users/${userId}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: newStatus })
             });
-            if (res.ok) fetchUsers();
+            if (!res.ok) setUsers(previousUsers); // Revert on failure
         } catch (error) {
             console.error(error);
+            setUsers(previousUsers);
         }
     };
 
     const handleUpdateRole = async (userId: string, newRole: string) => {
+        const previousUsers = [...users];
+        setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
+        
         try {
             const res = await fetch(`/api/admin/users/${userId}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ role: newRole })
             });
-            if (res.ok) fetchUsers();
+            if (!res.ok) setUsers(previousUsers); // Revert on failure
         } catch (error) {
             console.error(error);
+            setUsers(previousUsers);
         }
     };
 

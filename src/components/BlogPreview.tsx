@@ -14,7 +14,7 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
             <div className="container mx-auto px-6">
                 <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-16 gap-8 text-center lg:text-left">
                     <div className="max-w-xl">
-                        <h2 className="text-4xl md:text-5xl font-bold font-heading mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
                             Latest Insights
                         </h2>
                         <p className="text-slate-400 text-lg leading-relaxed">
@@ -23,7 +23,7 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
                     </div>
                     <Link
                         href="/blog"
-                        className="px-8 py-4 rounded-2xl text-slate-950 bg-emerald-500 hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 font-bold shadow-xl shadow-emerald-500/10 self-center lg:self-end"
+                        className="w-full lg:w-auto px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl text-slate-950 bg-emerald-500 hover:bg-emerald-400 transition-all flex items-center justify-center gap-2 font-bold shadow-xl shadow-emerald-500/10 self-center lg:self-end"
                     >
                         Go to Blog Engine
                         <ChevronRight size={18} />

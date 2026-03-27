@@ -41,8 +41,8 @@ export default function Skills() {
         <section id="skills" className="py-24 relative overflow-hidden bg-slate-900/30 border-y border-slate-800/50">
             <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-2xl mx-auto mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold font-heading mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
+                <div className="text-center max-w-2xl mx-auto mb-16 px-2">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading mb-6 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-sky-400 inline-block">
                         Professional Proficiency
                     </h2>
                     <p className="text-slate-400 text-lg">
@@ -58,9 +58,9 @@ export default function Skills() {
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 0.5, delay: idx * 0.2 }}
                             key={category.title}
-                            className="glass p-8 rounded-3xl group hover:border-emerald-500/30 transition-colors"
+                            className="glass p-6 sm:p-8 rounded-3xl group hover:border-emerald-500/30 transition-colors"
                         >
-                            <div className="flex items-center gap-4 mb-8">
+                            <div className="flex items-center gap-4 mb-6 sm:mb-8">
                                 <div className="p-4 bg-slate-800 rounded-2xl shadow-inner group-hover:scale-110 transition-transform">
                                     {category.icon}
                                 </div>

@@ -38,13 +38,13 @@ export default function Navbar() {
                 : "bg-transparent border-transparent"
                 }`}
         >
-            <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+            <div className="container mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group shrink-0">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-sky-500 flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-emerald-500 to-sky-500 flex items-center justify-center text-white font-bold text-base sm:text-xl group-hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20">
                         A
                     </div>
-                    <span className="font-heading font-bold text-sm sm:text-xl tracking-tight block truncate">
+                    <span className="font-heading font-bold text-xs sm:text-sm md:text-xl tracking-tight block truncate max-w-[140px] sm:max-w-none">
                         Mohtadi&apos;s <span className="text-emerald-400">Portal</span>
                     </span>
                 </Link>
@@ -105,7 +105,7 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             <div
-                className={`md:hidden absolute top-20 left-0 w-full bg-slate-900 border-b border-slate-800 transition-all duration-300 overflow-hidden ${isOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+                className={`md:hidden absolute top-16 sm:top-20 left-0 w-full bg-slate-900 border-b border-slate-800 transition-all duration-300 overflow-hidden ${isOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
                     }`}
             >
                 <ul className="container mx-auto px-6 py-4 flex flex-col gap-4">

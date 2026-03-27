@@ -19,10 +19,10 @@ export default function AdminInquiriesPage() {
                 <p className="text-slate-400">Manage client messages and project leads.</p>
             </div>
 
-            <div className="glass rounded-[2rem] border-slate-800 p-8">
+            <div className="glass rounded-[2rem] border-slate-800 p-4 sm:p-8">
                 <div className="space-y-4">
                     {inquiries.map((inquiry) => (
-                        <div key={inquiry.id} className="p-6 rounded-3xl bg-slate-900/50 border border-slate-800/30 hover:border-emerald-500/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group">
+                        <div key={inquiry.id} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-900/50 border border-slate-800/30 hover:border-emerald-500/30 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 group">
                             <div className="flex items-start gap-5">
                                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-xl text-white flex-shrink-0 ${inquiry.status === "unread" ? "bg-emerald-500 shadow-lg shadow-emerald-500/20" : "bg-slate-800"
                                     }`}>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import Script from "next/script";
 
 type Language = "en" | "ar" | "bn";
 
@@ -71,15 +72,40 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     const [language, setLanguage] = useState<Language>("en");
 
     useEffect(() => {
-        const savedLang = localStorage.getItem("app_lang") as Language;
-        if (savedLang && ["en", "ar", "bn"].includes(savedLang)) {
-            setLanguage(savedLang);
+        // Detect existing Google Translate cookie session
+        const match = document.cookie.match(/(^|;) ?googtrans=([^;]*)(;|$)/);
+        if (match) {
+            const langPair = match[2].split('/');
+            const lang = langPair[2] as Language;
+            if (lang && ["en", "ar", "bn"].includes(lang)) {
+                setLanguage(lang);
+            }
         }
     }, []);
 
     const handleChangeLanguage = (lang: Language) => {
         setLanguage(lang);
-        localStorage.setItem("app_lang", lang);
+        
+        if (lang === "en") {
+            document.cookie = 'googtrans=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = `googtrans=; Path=/; domain=.${window.location.hostname}; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+            window.location.reload();
+            return;
+        }
+
+        // 1. Set Google Translate Cookie manually to ensure cross-session persistence
+        document.cookie = `googtrans=/en/${lang}; path=/;`;
+        document.cookie = `googtrans=/en/${lang}; domain=.${window.location.hostname}; path=/;`;
+        
+        // 2. Smoothly trigger the Google Translate DOM engine without reloading the page
+        const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+        if (select) {
+            select.value = lang;
+            select.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+        } else {
+            // Fallback for first-load or edge cases
+            window.location.reload();
+        }
     };
 
     const t = (key: string) => {
@@ -89,6 +115,51 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     return (
         <LanguageContext.Provider value={{ language, setLanguage: handleChangeLanguage, t }}>
             <div dir={language === "ar" ? "rtl" : "ltr"} className="min-h-screen transition-all duration-300">
+                
+                {/* Invisible Google Translate Widget Mount */}
+                <div id="google_translate_element" style={{ position: 'absolute', opacity: 0, zIndex: -999, pointerEvents: 'none' }}></div>
+                
+                <Script id="google-translate-init" strategy="beforeInteractive">
+                    {`
+                        window.googleTranslateElementInit = function() {
+                            new window.google.translate.TranslateElement({
+                                pageLanguage: 'en',
+                                includedLanguages: 'en,ar,bn',
+                                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                                autoDisplay: false
+                            }, 'google_translate_element');
+                        };
+                    `}
+                </Script>
+                
+                <Script
+                    src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+                    strategy="afterInteractive"
+                />
+
+                {/* Hide Google Topbar that injects itself on translated sites */}
+                <style dangerouslySetInnerHTML={{ __html: `
+                    /* Hide Top Banner */
+                    .goog-te-banner-frame.skiptranslate { display: none !important; }
+                    body { top: 0px !important; position: static !important; }
+                    
+                    /* Hide Tooltips & Popups */
+                    #goog-gt-tt, .goog-te-balloon-frame { display: none !important; }
+                    .goog-tooltip { display: none !important; }
+                    .goog-tooltip:hover { display: none !important; }
+                    .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+                    
+                    /* Hide New Modern G-Translate Suggestion Modals / Wrappers */
+                    .VIpgJd-Zvi9od-aZ2wEe-wOHMyf { display: none !important; }
+                    .VIpgJd-Zvi9od-aZ2wEe-wOHMyf-ti6hGc { display: none !important; }
+                    .VIpgJd-Zvi9od-ORHb-OEVmcd { display: none !important; }
+                    .VIpgJd-Zvi9od-SmV6nw { display: none !important; }
+                    .VIpgJd-Zvi9od-l4eHX-hSRGPd { display: none !important; }
+                    
+                    /* Hide any generic iframes Google tries to spawn except AdSense */
+                    iframe[name="c"] { display: none !important; }
+                ` }} />
+
                 {children}
             </div>
         </LanguageContext.Provider>

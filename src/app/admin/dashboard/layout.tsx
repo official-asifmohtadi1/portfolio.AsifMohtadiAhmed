@@ -162,10 +162,10 @@ export default function AdminDashboardLayout({
                     </div>
 
                     <div className="flex items-center gap-3 lg:gap-6">
-                        <button className="relative w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-colors">
+                        <Link href="/admin/dashboard/inquiries" className="relative w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-400 transition-colors">
                             <Bell size={18} />
                             <span className="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full" />
-                        </button>
+                        </Link>
                         <div className="h-8 w-px bg-slate-800 hidden sm:block" />
                         <div className="flex items-center gap-3 lg:gap-4">
                             <div className="text-right hidden sm:block">

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { sendEmail } from "@/lib/mailer";
 
 export async function PATCH(
     req: Request,
@@ -25,6 +26,19 @@ export async function PATCH(
                 ...(role && { role }),
             }
         });
+
+        if (status && updatedUser.email) {
+            try {
+                const subject = status === "APPROVED" ? "Your Account is Approved!" : "Account Update";
+                const message = status === "APPROVED" 
+                    ? `Good news! Your account has been approved and you can now log in to the admin dashboard with the role of ${updatedUser.role}.`
+                    : `Your account status has been updated to: ${status}.`;
+                
+                await sendEmail(updatedUser.email, subject, message);
+            } catch (error) {
+                console.error("Failed to send status update email:", error);
+            }
+        }
 
         return NextResponse.json({ success: true, user: updatedUser });
     } catch (error) {

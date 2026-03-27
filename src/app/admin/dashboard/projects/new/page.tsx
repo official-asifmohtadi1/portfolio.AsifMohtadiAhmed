@@ -86,8 +86,8 @@ export default function NewProjectPage() {
                 <p className="text-slate-400 text-lg">Add a new masterpiece to your professional showcase.</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-10 glass p-10 md:p-14 rounded-[3.5rem] border-slate-800 shadow-2xl relative overflow-hidden group">
-                <div className="grid md:grid-cols-2 gap-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10 glass p-6 sm:p-10 md:p-14 rounded-3xl md:rounded-[3.5rem] border-slate-800 shadow-2xl relative overflow-hidden flex flex-col group">
+                <div className="grid md:grid-cols-2 gap-6 md:gap-8">
                     {/* Project Title */}
                     <div className="md:col-span-2">
                         <label className="block text-sm font-bold text-slate-300 mb-3 flex items-center gap-2" htmlFor="title">

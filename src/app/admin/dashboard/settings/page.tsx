@@ -1,12 +1,43 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, Lock, Globe, ShieldCheck, Bell, Palette, Save, Camera, Crown } from "lucide-react";
 import SecuritySettings from "./SecuritySettings";
 
 export default function AdminSettingsPage() {
     const [activeTab, setActiveTab] = useState("Public Profile");
+    const [settings, setSettings] = useState<any>(null);
+    const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const res = await fetch("/api/admin/settings");
+            if (res.ok) {
+                const data = await res.json();
+                setSettings(data.settings);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    const handleSaveSettings = async () => {
+        setIsSaving(true);
+        try {
+            const res = await fetch("/api/admin/settings", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(settings)
+            });
+            if (!res.ok) throw new Error("Failed to save");
+            alert("Settings saved successfully!");
+        } catch (error) {
+            console.error(error);
+            alert("Error saving settings");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const tabs = [
         { name: "Public Profile", icon: <User size={18} /> },
@@ -47,7 +78,7 @@ export default function AdminSettingsPage() {
                     {activeTab === "Public Profile" && (
                         <>
                             {/* Profile Identity Cards */}
-                    <div className="glass p-8 rounded-[2rem] border-slate-800">
+                    <div className="glass p-6 sm:p-8 rounded-[2rem] border-slate-800">
                         <h3 className="text-xl font-bold mb-6 flex items-center gap-3">
                             <User className="text-emerald-400" size={20} /> Account Identity
                         </h3>
@@ -129,7 +160,7 @@ export default function AdminSettingsPage() {
                         </div>
                     </div>
 
-                    <div className="glass p-10 rounded-[2.5rem] border-slate-800">
+                    <div className="glass p-6 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border-slate-800">
                         <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
                             <User className="text-emerald-400" /> General Profile
                         </h3>
@@ -148,7 +179,7 @@ export default function AdminSettingsPage() {
 
                             <div className="space-y-3">
                                 <label className="text-sm font-bold text-slate-400">Professional Bio</label>
-                                <textarea rows={4} className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 focus:border-emerald-500 outline-none transition-all resize-none">I am a passionate Full-Stack Developer specializing in high-performance React applications and custom WordPress solutions.</textarea>
+                                <textarea rows={4} className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 focus:border-emerald-500 outline-none transition-all resize-none" defaultValue="I am a passionate Full-Stack Developer specializing in high-performance React applications and custom WordPress solutions." />
                             </div>
 
                             <div className="space-y-3">
@@ -164,7 +195,7 @@ export default function AdminSettingsPage() {
                         </div>
                     </div>
 
-                    <div className="glass p-10 rounded-[2.5rem] border-red-500/10 hover:border-red-500/30 transition-all">
+                    <div className="glass p-6 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border-red-500/10 hover:border-red-500/30 transition-all">
                         <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center gap-3">
                             <ShieldCheck size={20} /> Danger Zone
                         </h3>
@@ -177,6 +208,126 @@ export default function AdminSettingsPage() {
                     )}
                     {activeTab === "Security" && (
                         <SecuritySettings />
+                    )}
+                    {activeTab === "SEO & Social" && settings && (
+                        <div className="glass p-8 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border-slate-800 space-y-8">
+                            <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+                                <Globe className="text-emerald-400" /> SEO Settings
+                            </h3>
+                            <div className="space-y-6">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-400">Default SEO Title</label>
+                                    <input 
+                                        type="text" 
+                                        value={settings.seoTitle || ''} 
+                                        onChange={(e) => setSettings({...settings, seoTitle: e.target.value})}
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-5 py-3.5 focus:border-emerald-500 outline-none transition-all" 
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-400">SEO Keywords (comma separated)</label>
+                                    <input 
+                                        type="text" 
+                                        value={settings.seoKeywords || ''} 
+                                        onChange={(e) => setSettings({...settings, seoKeywords: e.target.value})}
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-xl px-5 py-3.5 focus:border-emerald-500 outline-none transition-all" 
+                                    />
+                                </div>
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-400">SEO Description</label>
+                                    <textarea 
+                                        rows={3}
+                                        value={settings.seoDescription || ''} 
+                                        onChange={(e) => setSettings({...settings, seoDescription: e.target.value})}
+                                        className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-5 py-4 focus:border-emerald-500 outline-none transition-all resize-none"
+                                    />
+                                </div>
+                                <div className="pt-6 border-t border-slate-800">
+                                    <button 
+                                        disabled={isSaving}
+                                        onClick={handleSaveSettings}
+                                        className="px-10 py-4 rounded-2xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3 disabled:opacity-50"
+                                    >
+                                        <Save size={20} /> {isSaving ? "Saving..." : "Save Settings"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {activeTab === "Notifications" && settings && (
+                        <div className="glass p-8 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border-slate-800 space-y-8">
+                            <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+                                <Bell className="text-emerald-400" /> Dashboard Notifications
+                            </h3>
+                            <div className="space-y-6">
+                                <label className="flex items-center gap-4 cursor-pointer p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/30 transition-all">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={settings.notifyOnNewUser}
+                                        onChange={(e) => setSettings({ ...settings, notifyOnNewUser: e.target.checked })}
+                                        className="w-5 h-5 accent-emerald-500 rounded"
+                                    />
+                                    <div>
+                                        <p className="font-bold">Email me when a new user registers</p>
+                                        <p className="text-xs text-slate-500">Receive an email immediately to approve or reject their access.</p>
+                                    </div>
+                                </label>
+                                <label className="flex items-center gap-4 cursor-pointer p-4 rounded-2xl border border-slate-800 hover:border-emerald-500/30 transition-all">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={settings.notifyOnInquiry}
+                                        onChange={(e) => setSettings({ ...settings, notifyOnInquiry: e.target.checked })}
+                                        className="w-5 h-5 accent-emerald-500 rounded"
+                                    />
+                                    <div>
+                                        <p className="font-bold">Email me when a new contact inquiry arrives</p>
+                                        <p className="text-xs text-slate-500">Receive alerts when someone uses your portfolio's contact form.</p>
+                                    </div>
+                                </label>
+                                <div className="pt-6 border-t border-slate-800">
+                                    <button 
+                                        disabled={isSaving}
+                                        onClick={handleSaveSettings}
+                                        className="px-10 py-4 rounded-2xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3 disabled:opacity-50"
+                                    >
+                                        <Save size={20} /> {isSaving ? "Saving..." : "Save Preferences"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    {activeTab === "Theme & Styling" && settings && (
+                        <div className="glass p-8 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border-slate-800 space-y-8">
+                            <h3 className="text-2xl font-bold mb-4 flex items-center gap-3">
+                                <Palette className="text-emerald-400" /> Brand Identity
+                            </h3>
+                            <div className="space-y-6">
+                                <div className="space-y-3">
+                                    <label className="text-sm font-bold text-slate-400">Primary Brand Color</label>
+                                    <div className="flex items-center gap-4">
+                                        <input 
+                                            type="color" 
+                                            value={settings.primaryColor || '#10b981'} 
+                                            onChange={(e) => setSettings({...settings, primaryColor: e.target.value})}
+                                            className="w-14 h-14 rounded-xl cursor-pointer bg-transparent border-0 p-0 overflow-hidden" 
+                                        />
+                                        <span className="font-mono text-slate-300 bg-slate-900 px-4 py-2 rounded-lg border border-slate-800">
+                                            {settings.primaryColor || '#10b981'}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-slate-500 mt-2">This color will be dynamically injected across your entire site via CSS variables (if configured).</p>
+                                </div>
+                                <div className="pt-6 border-t border-slate-800">
+                                    <button 
+                                        disabled={isSaving}
+                                        onClick={handleSaveSettings}
+                                        className="px-10 py-4 rounded-2xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-3 disabled:opacity-50"
+                                    >
+                                        <Save size={20} /> {isSaving ? "Saving..." : "Save Theme"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
