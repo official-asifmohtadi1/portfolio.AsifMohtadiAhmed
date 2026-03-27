@@ -32,7 +32,7 @@ export async function PATCH(req: Request) {
         const body = await req.json();
         
         // Allowed fields to update
-        const data: any = {};
+        const data: Record<string, string | boolean> = {};
         if (body.seoTitle !== undefined) data.seoTitle = body.seoTitle;
         if (body.seoDescription !== undefined) data.seoDescription = body.seoDescription;
         if (body.seoKeywords !== undefined) data.seoKeywords = body.seoKeywords;

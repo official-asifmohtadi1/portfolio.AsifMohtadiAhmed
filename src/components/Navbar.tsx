@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 
 import { useLanguage } from "./LanguageProvider";
 
+
 export default function Navbar() {
     const { language, setLanguage, t } = useLanguage();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -74,7 +75,7 @@ export default function Navbar() {
                         ].map((lang) => (
                             <button
                                 key={lang.code}
-                                onClick={() => setLanguage(lang.code as any)}
+                                onClick={() => setLanguage(lang.code as "en" | "ar" | "bn")}
                                 className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${language === lang.code ? "bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20" : "text-slate-500 hover:text-slate-300"}`}
                             >
                                 {lang.label}
@@ -137,7 +138,7 @@ export default function Navbar() {
                             {["en", "bn", "ar"].map((lang) => (
                                 <button
                                     key={lang}
-                                    onClick={() => setLanguage(lang as any)}
+                                    onClick={() => setLanguage(lang as "en" | "ar" | "bn")}
                                     className={`flex-1 py-3 rounded-lg text-xs font-bold uppercase transition-all ${language === lang ? "bg-emerald-500 text-slate-950" : "text-slate-400 hover:bg-slate-800"}`}
                                 >
                                     {lang === "en" ? "English" : lang === "bn" ? "Bangla" : "Arabic"}

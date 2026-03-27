@@ -14,7 +14,7 @@ const getTransporter = () => {
     });
 };
 
-export async function sendEmail(to: string, subject: string, text: string, html?: string, attachments?: any[]) {
+export async function sendEmail(to: string, subject: string, text: string, html?: string, attachments?: { filename: string; content: string | Buffer; contentType?: string; }[]) {
     try {
         const transporter = getTransporter();
         const info = await transporter.sendMail({
